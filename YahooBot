@@ -12,7 +12,6 @@
 let findText = document.getElementById("ybar-sbq");
 let btnOK = document.getElementById("ybar-search");
 let keywords = ["Manufacturing PMI US", "Manufacturing PMI Rus", "Unemployment rus", "trade balance eu"];
-let link;
 
 if(btnOK !== undefined) {
   findText.value = keywords[getRandomInt(0, keywords.length - 1)];
