@@ -4,7 +4,8 @@
 // @version      0.1
 // @description  Bot for Yahoo!
 // @author       Alexey Morozov
-// @match        https://www.yahoo.com/
+// @match        https://www.yahoo.com/*
+// @match        https://search.yahoo.com/*
 // @icon         https://s.yimg.com/rz/p/yahoo_homepage_en-US_s_f_p_bestfit_homepage.png
 // @grant        none
 // ==/UserScript==
@@ -12,14 +13,31 @@
 let findText = document.getElementById("ybar-sbq");
 let btnOK = document.getElementById("ybar-search");
 let keywords = ["Manufacturing PMI US", "Manufacturing PMI Rus", "Unemployment rus", "trade balance eu"];
+let links = document.links;
+let keyword = keywords[getRandomInt(0, keywords.length - 1)];
 
-if(btnOK !== undefined) {
-  findText.value = keywords[getRandomInt(0, keywords.length - 1)];
-  btnOK.click();
+if(btnOK !== null) {
+   let i = 0;
+  let timerId = setInterval(() => {
+      findText.value += keyword[i];
+      i++;
+      if(i == keyword.length) {
+        clearInterval(timerId);
+        setTimeout(() => {
+        btnOK.click();
+        }, getRandomInt(1000, 2500));
+      }
+   }, 500);
   }
   else {
-  console.log("структура страницы поменялась");
-  }
+    for(let i = 0; i<links.length; i++) {
+      if(links[i].href.indexOf("tradingeconomics.com") != -1) {
+        console.log("Нашел строку" + links[i]);        
+        links[i].click();
+        break;
+      }
+    }
+   }
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
