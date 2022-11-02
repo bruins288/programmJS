@@ -1,1 +1,33 @@
-//Преобразование строки 
+//Преобразование строки в формат буква уникальна  "-" в противном случае "+"
+ "use strict";
+
+      let str = "Good morning";
+      let count = {};
+
+      for (let i = 0; i < str.length; i++) {
+        if (str[i] == " " || str[i] == "-" || str[i] == "=") continue;
+        if (count[str[i]] == undefined) {
+          count[str[i]] = 1;
+        } else {
+          count[str[i]]++;
+        }
+      }
+
+      console.log(count);
+
+      let strNew = "";
+
+      for (let i = 0; i < str.length; i++) {
+        for (let key in count) {
+          strNew += str[i] == " " ? " " : "";
+          if (str[i] == key) {
+            if (count[key] > 1) {
+              strNew += "+";
+            } else {
+              strNew += "-";
+            }
+          }
+        }
+      }
+
+      console.log(strNew);
