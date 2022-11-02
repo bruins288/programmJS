@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+   
+    <title>JavaScript Задача 12</title>
+    <style>
+        #blue, #orange, #green {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+        }
+        #orange {
+            background-color: rgb(250, 165, 7);
+            top: 350px;
+        }
+        #blue {            
+            background-color: rgb(8, 8, 248);
+        }
+        #green {
+            background-color: rgb(3, 75, 3);
+            top: 650px;
+        }
+        #gray {
+            width: 300px;
+            height: 300px;
+            background-color: rgb(140, 140, 140);
+            position: absolute;
+            left: 800px;
+            top: 300px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="container p-5"> 
+                <div id="gray"></div>         
+                <div id="blue"></div>
+                <div id="orange"></div>                
+                <div id="green"></div>                                
+        </div>
+    </main>
+    <script>
+        let ids = ["blue", "orange", "green"];
+        let elements = [];
+        let blue_color = 'rgb(8, 8, 248)';
+        let orange_color = 'rgb(250, 165, 7)';
+        let green_color = 'rgb(3, 75, 3)';
+
+        let elGray = document.getElementById("gray");               
+    
+        for (let index = 0; index <ids.length; index++) {
+            elements[index] = document.getElementById(ids[index]);             
+        }
+
+        for(let elem of elements) {  
+                             
+            elem.onmousedown = function() {
+                document.addEventListener("mousemove", getMoveElement);                
+                document.onmouseup = function() {
+                document.removeEventListener("mousemove", getMoveElement);
+                let elem_top = elem.getBoundingClientRect().top;
+                let elem_left = elem.getBoundingClientRect().left;
+                let elem_right = elem.getBoundingClientRect().right;
+                let elem_bottom = elem.getBoundingClientRect().bottom;
+               
+                if((elGray.getBoundingClientRect().top < elem_top) && 
+                (elGray.getBoundingClientRect().left < elem_left) && 
+                (elGray.getBoundingClientRect().right > elem_right) &&
+                (elGray.getBoundingClientRect().bottom > elem_bottom)) {
+                   switch (elem.id) {
+                    case "blue":
+                        elGray.style.backgroundColor = blue_color;
+                        break;                   
+                    case "orange":
+                        elGray.style.backgroundColor = orange_color;                        
+                        break;
+                    case "green":
+                        elGray.style.backgroundColor = green_color;                        
+                        break;
+                   }                   
+                    elem.style.visibility = 'hidden';                    
+                }
+                 //console.log(elem.id);
+            };
+                function getMoveElement(event) {
+                    let xCoordinate = event.clientX - 100;
+                    let yCoordinate = event.clientY - 100;                   
+                    
+                    elem.style.top = yCoordinate + "px";
+                    elem.style.left = xCoordinate + "px";               
+                }
+            };
+        }
+
+    </script>
+     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</body>
+</html>
