@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Взаимодействие с DOM</title>
+</head>
+<style>
+    #horse, #helicopter, #skydiver {
+        position: absolute;
+    }
+   
+      
+</style>
+<body>   
+        <img src="../images/test.webp" alt="" id="horse">
+        <img src="../images/vertolyot8.jpg" alt="" id="helicopter">
+        <img src="../images/detsk-97.jpg" alt="" id="skydiver">
+    
+    <script>             
+        class FlyingImage {
+            constructor(id, width, height) {
+                this.imageFly = document.getElementById(id);
+                this.width = width;
+                this.imageFly.style.width = width + 'px';
+                this.height = height;
+                this.imageFly.style.height = height + 'px';
+                this.speedX = 0;
+                this.speedY = 0;
+                this.flag = true;                              
+            }
+            setVisible(isVisible) {
+                isVisible ? this.imageFly.style.visibility = 'visible' : this.imageFly.style.visibility = 'hidden';
+            }
+            setTransform(isTrue) {
+                isTrue ? this.imageFly.style.transform = 'scaleX(-1)' :this.imageFly.style.transform = 'scaleX(1)';
+            }
+            setPositionLeft(speed, left) {
+                this.imageFly.style.left =left + speed + 'px';
+            }
+            setPositionTop(speed, top) {
+                this.imageFly.style.top =top + speed + 'px';
+            }
+            getPositionTop() {
+                return this.imageFly.getBoundingClientRect().top;
+            }
+            getPositionLeft() {
+                return this.imageFly.getBoundingClientRect().left;
+            }
+            setMoveX(left, acceleration, isTransform) {
+                if((window.innerWidth - this.width > this.speedX) && this.flag) {
+                    isTransform ? this.setTransform(true) : this.setTransform(false);
+                    this.speedX += acceleration;                    
+                }   
+                else {
+                    isTransform ? this.setTransform(false) : this.setTransform(true);
+                       this.speedX -= acceleration;
+                       this.flag = this.speedX == 0 ? true : false;                                            
+                }
+                this.setPositionLeft(left, this.speedX);
+            }           
+            setMoveY(top, acceleration, isTransform) {
+                isTransform ? this.setTransform(true) : this.setTransform(false);
+                this.speedY += acceleration;                                                      
+                this.setPositionTop(top, this.speedY);
+            }
+        }
+        let horse = new FlyingImage("horse", 200, 150);
+        horse.setVisible(false);
+        let helicopter = new FlyingImage("helicopter", 220, 220);
+        helicopter.setVisible(false);
+        let skydiver = new FlyingImage("skydiver", 100, 100);
+        skydiver.setVisible(false);
+        
+        let flagHelicopter = false;
+        let flagSkydriver = false;
+        horseMove();      
+
+
+        function horseMove() {
+            let horseX = setInterval(frame, 100);
+            function frame() {                
+            horse.setVisible(true);
+            horse.setMoveX(0, 10, false);
+            if(!flagHelicopter)
+             if(horse.getPositionLeft() == window.innerWidth - horse.width) {                                                      
+                helicopter.setVisible(true);
+                helicopter.setPositionTop(0, 200);               
+                flagHelicopter = true
+                helicopterMove();
+               }
+            }
+        } 
+        function helicopterMove() {            
+            let helicopterX = setInterval(frame, 100);
+            function frame() {
+            helicopter.setMoveX(0, 20, true);
+            if(!flagSkydriver)
+                if(helicopter.getPositionLeft() == window.innerWidth / 2) {
+                    skydiver.setVisible(true);
+                    skydiver.setPositionLeft(0, window.innerWidth / 2);
+                    skydiver.setPositionTop(0,window.innerHeight / 2 - skydiver.height);
+                    flagSkydriver = true;
+                    skydiverMove();
+                    }                    
+                }
+            }  
+        
+        function skydiverMove() {
+            let skydiverY = setInterval(frame, 100);
+            function frame() {
+                skydiver.setMoveY(window.innerHeight / 2 - skydiver.height, 5);
+
+                if(skydiver.getPositionTop() >= window.innerHeight - skydiver.height) {                    
+                    clearInterval(skydiverY);
+                }                    
+            }
+        }          
+        
+            
+
+    </script>
+</body>
+</html>
